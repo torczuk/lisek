@@ -2,7 +2,7 @@ package com.github.torczuk.lisek
 
 import com.github.torczuk.lisek.model.Atom
 import com.github.torczuk.lisek.model.Expression
-import com.github.torczuk.lisek.model.Lst
+import com.github.torczuk.lisek.model.List
 
 class Parser {
     companion object {
@@ -12,7 +12,7 @@ class Parser {
 
     fun parse(expression: String): Expression = parse(tokenize(expression).toMutableList())
 
-    private fun tokenize(expression: String): List<String> {
+    private fun tokenize(expression: String): kotlin.collections.List<String> {
         return expression
             .replace(leftParenthesis, " $leftParenthesis ")
             .replace(rightParenthesis, " $rightParenthesis ")
@@ -26,13 +26,13 @@ class Parser {
 
         if (leftParenthesis == token) {
             val inList = mutableListOf<Expression>()
-            while (token != rightParenthesis) {
+            while (token != rightParenthesis && expression.first() != rightParenthesis) {
                 val ex = parse(expression)
                 inList.add(ex)
                 token = expression.first()
             }
             expression.removeAt(0)
-            return Lst(inList)
+            return List(inList)
         } else if (rightParenthesis == token) {
             throw RuntimeException("Illegal ')'")
         } else {

@@ -1,7 +1,7 @@
 package com.github.torczuk.lisek
 
 import com.github.torczuk.lisek.model.Atom
-import com.github.torczuk.lisek.model.Lst
+import com.github.torczuk.lisek.model.List
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +14,7 @@ class ParserTest {
 
         val tokens = parser.parse(expression)
 
-        assertThat(tokens).isEqualTo(Lst())
+        assertThat(tokens).isEqualTo(List())
     }
 
     @Test
@@ -33,10 +33,25 @@ class ParserTest {
         val tokens = parser.parse(expression)
 
         assertThat(tokens).isEqualTo(
-            Lst(
+            List(
                 Atom("+"),
                 Atom("1"),
                 Atom("2")
+            )
+        )
+    }
+
+    @Test
+    fun `should parse list containings empty lists`() {
+        val expression = "(() () ())"
+
+        val tokens = parser.parse(expression)
+
+        assertThat(tokens).isEqualTo(
+            List(
+                List(),
+                List(),
+                List()
             )
         )
     }
@@ -48,11 +63,11 @@ class ParserTest {
         val tokens = parser.parse(expression)
 
         assertThat(tokens).isEqualTo(
-            Lst(
-                Lst(
+            List(
+                List(
                     Atom("lambda"),
-                    Lst(Atom("arg")),
-                    Lst(Atom("+"), Atom("arg"), Atom("1"))
+                    List(Atom("arg")),
+                    List(Atom("+"), Atom("arg"), Atom("1"))
                 ),
                 Atom("5")
             )
